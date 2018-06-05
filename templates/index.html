@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+
+
+    <div class="wrap-main-slider">
+        <ul class="main-slider"
+            style="background: url({% static 'css/images/green_diamond_patterns-wallpaper-1920x1080.jpg' %}) no-repeat center;">
+            {% for item in sliders %}
+                <li class="main-slider__item main-slider__item_first-bg">
+                    <div class="container">
+                        <h1 class="main-slider__title" style="color: black;">{{ item.slogan }}</h1>
+
+                        <article class="main-slider-post">
+                            <div class="main-slider-post__container">
+                                <h1 class="main-slider-post__title">{{ item.title }}</h1>
+
+
+                                <blockquote class="main-slider-post__quote">
+                                    <p style="color: black;">{{ item.description }}</p>
+                                </blockquote>
+                            </div>
+                            <!-- end main slider post container -->
+
+                            <div class="main-slider-post__image">
+                                <img src="{{ item.image.url }}" alt="#" width="432px" height="275px">
+
+                                <div class="wrap-price">
+                                    <div class="price">{{ item.price }} сом</div>
+                                </div>
+                            </div>
+                            <!-- end main slider post image -->
+                        </article>
+                        <!-- main slider post -->
+                    </div>
+                    {#                <!-- end container -->#}
+                </li>
+            {% endfor %}
+            <!-- end main slider item -->
+        </ul>
+        <!-- end main slider -->
+    </div>
+    <!-- end wrap main slider -->
+
+    <div class="container">
+        <!-- Button trigger modal -->
+
+        <!-- Modal -->
+        <div class="modal fade " id="exampleModalCenter" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="shop-item shop-item_big shop-item_ins cf">
+                            <div class="shop-item__content">
+                                <h1 class="shop-item__title">{{ product.title }}</h1>
+
+                                <p>{{ product.description }}</p>
+
+                                <blockquote class="shop-item__quote">
+                                    <p>Best treat when inviting friends or family!</p>
+                                </blockquote>
+
+                                <div class="shop-item__price">{{ product.price }}<span>$75</span></div>
+                            </div>
+                            <!-- end shop item content -->
+
+                            <div class="shop-item__thumb">
+                                <img src="{{ product.image.url }}" alt="">
+
+                                <a href="#" class="buy-btn buy-btn_round"><i class="buy-btn__icon"></i>Добавить в
+                                    корзину</a>
+                            </div>
+                            <!-- end shop item thumb -->
+
+                            <div class="shop-item__details">
+                                <div class="amount">
+                                    <input type="text" value="1" size="5" class="amount__field"/>
+                                    <span class="amount__btn amount__btn_minus">-</span>
+                                    <span class="amount__btn amount__btn_plus">+</span>
+                                </div>
+                                <!-- end amount -->
+                                <br>
+                                <a href="#" class="buy-btn buy-btn_round"><i class="buy-btn__icon"></i>Buy</a>
+                            </div>
+                            <!-- end shop item detailed col -->
+                        </div>
+                        <!-- end shop item big -->
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="wrap-slider">
+            <header class="slider-heading cf">
+                {#                <div class="slider-controls">#}
+                {#                    <div class="slider-controls__prev"></div>#}
+                {#                    <div class="slider-controls__next"></div>#}
+                {#                </div>#}
+                {#                <!-- end slider controls -->#}
+
+                <h1 class="slider-heading__title">Специальные предложения</h1>
+
+
+            </header>
+            <!-- end slider heading -->
+
+            <ul class="slider">
+                {% for item in products %}
+
+                    <li class="slider__item">
+                        <div class="shop-item">
+                            <a href="{% url 'ajax_product' id=item.id %}" class="ajax_link_product">
+                                <div class="shop-item__thumb">
+                                    <img src="{{ item.image.url }}" alt="">
+                                </div>
+                            </a>
+                            <!-- end shop item thumb -->
+
+                            <div class="shop-item__content">
+                                <h1 class="shop-item__title"
+                                    style="font-size: 14px">{{ item.title|truncatechars:20 }}</h1>
+                                <div class="shop-item__price">{{ item.price }} сом</div>
+                            </div>
+                            <!-- end shop item content -->
+
+                            <a href="{% url 'ajax_product' id=item.id %}" class="buy-btn ajax_link_product"
+                               style="font-size: 16px; height: 73px;"><i
+                                    class="buy-btn__icon"></i>Посмотреть</a>
+                        </div>
+                        <!-- end shop item -->
+                    </li>
+
+                    <!-- end slider item -->
+                {% endfor %}
+
+                <!-- end slider item -->
+            </ul>
+        </div>
+        <!-- end best offers -->
+
+        <header class="slider-heading cf">
+
+            <h1 class="slider-heading__title">Продукция</h1>
+
+        </header>
+
+        <div class="shop-items cf">
+            <div class="grid-sizer"></div>
+            {% for item in products %}
+                <a href="{% url 'ajax_product' id=item.id %}" class="ajax_link_product">
+                    <div class="shop-item">
+                        <div class="shop-item__thumb">
+                            <img src="{{ item.image.url }}" alt="" style="padding: 15px;">
+                        </div>
+                        <!-- end shop item thumb -->
+
+                        <div class="shop-item__content">
+                            <h1 class="shop-item__title" style="font-size: 14px">{{ item.title|truncatechars:20 }}</h1>
+                            <div class="shop-item__price">{{ item.price }} сом</div>
+                        </div>
+                        <!-- end shop item content -->
+
+                        <a href="{% url 'ajax_product' id=item.id %}" class="buy-btn ajax_link_product"
+                           id="ajax_cart_add" style="font-size: 16px; "><i
+                                class="buy-btn__icon"></i>Посмотреть</a>
+                    </div>
+                    <!-- end shop item -->
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block custom_scripts %}
+    <script>
+        $('.ajax_link_product').each(function (i, obj) {
+            $(obj).on('click', function (event) {
+                event.preventDefault();
+                var that = this;
+                console.log($(that).attr('href'));
+
+                $.ajax({
+                    method: 'POST',
+                    dataType: 'HTML',
+                    url: $(that).attr('href'),
+                    success: function (response) {
+                        $('.modal-body').html(response);
+                        $('#exampleModalCenter').modal('toggle');
+
+                    },
+                    error: function () {
+                        console.error('Error to send requet!');
+                    }
+                });
+            })
+        });
+
+
+    </script>
+
+
+{% endblock %}

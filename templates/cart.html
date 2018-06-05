@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1 style="text-align: center;">Корзина</h1>
+
+
+        <div class="shop-items cf">
+            <div class="grid-sizer"></div>
+            {% load carton_tags %}
+            {% get_basket as cart %}
+            {% for item in cart.products %}
+                <div class="shop-item">
+                    <div class="shop-item__thumb">
+                        <img src="{{ item.image.url }}" alt="" style="padding: 15px;">
+                    </div>
+                    <!-- end shop item thumb -->
+
+                    <div class="shop-item__content">
+                        <h1 class="shop-item__title" style="font-size: 14px">{{ item.title|truncatechars:20 }}</h1>
+                        <div class="shop-item__price">{{ item.price }} сом</div>
+                    </div>
+                    <!-- end shop item content -->
+
+                    <a href="{% url 'delete_from_cart' %}?product_id={{ item.id }}" class="buy-btn"
+                       style=" line-height: 0;    font-size: 24px;"><i
+                            class="buy-btn__icon"></i>Удалить</a>
+                </div>
+                <!-- end shop item -->
+
+            {% endfor %}
+
+        </div>
+    </div>
+    <form action="{% url 'send_message' %}" method="post" class="contacts-form">
+        <h1 class="contacts-form__title">Заполните форму заявку для покупки</h1>
+
+        <input type="text" name="name" placeholder="Имя" required>
+        <input type="email" name="email" placeholder="E-mail">
+        <input type="text" name="phone_number" placeholder="Номер телефона">
+        {#            <textarea placeholder="Message..."></textarea>#}
+        <button type="submit" class="btn">Отправить<i class="form-btn-arrow"></i></button>
+    </form>
+
+
+{% endblock %}
+
+{% block custom_scripts %}
+    <script>
+        $('.buy-btn').each(function (i, obj) {
+            $(obj).on('click', function (event) {
+                event.preventDefault();
+                var that = this;
+                console.log($(that).attr('href'));
+
+                $.ajax({
+                    method: 'GET',
+                    dataType: 'HTML',
+                    url: $(that).attr('href'),
+                    success: function (response) {
+                        $('.basket').html(response);
+                        {#                        $('.result').html(response);#}
+                        {#var data = JSON.parse(response);#}
+                        {##}
+                        {#var input_form = document.createElement("inpu");#}
+                        {#input_form.type = "text";#}
+                        {#input_form.value = "det=" + data.result;#}
+                        {#input_form.className = "form-button"; // set the CSS class#}
+                        {#var block = document.getElementById('matrix_id');#}
+                        {#block.append(input_form);#}
+                    },
+                    error: function () {
+                        console.error('Error to send requet!');
+                    }
+                });
+            })
+        });
+
+        $('.contacts-form').each(function (i, obj) {
+            $(obj).submit(function (event) {
+                event.preventDefault();
+                var that = this;
+                console.log($(that).attr('action'));
+
+                $.ajax({
+                    method: 'POST',
+                    dataType: 'HTML',
+                    data: $(that).serialize(),
+                    url: $(that).attr('action'),
+                    success: function (response) {
+                        alert('success');
+                    },
+                    error: function () {
+                        console.error('Error to send requet!');
+                    }
+                });
+            })
+        });
+    </script>
+{% endblock %}
